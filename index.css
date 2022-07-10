@@ -1,5 +1,6 @@
 @import 'resets.css';
 
+/* general */
 html {
     width: 100%;
     height: 100%;
@@ -11,4 +12,44 @@ body {
     align-items: center;
     width: 100%;
     height: 100%;
+}
+
+
+/* calculator */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono');
+
+.calculator {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: fit-content;
+    max-width: 18rem;
+    padding: 1.2rem;
+    border-radius: 0.5rem;
+    background-color: blueviolet;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 3.5rem;
+}
+
+.calculator__input-field {
+    width: 100%;
+    border: 2px solid black;
+    text-align: right;
+    border-radius: 0.25rem;
+}
+
+.calculator__buttons-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.calculator__buttons-grid > .row {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.calculator-button {
+    padding: 0 1.5rem;
 }
