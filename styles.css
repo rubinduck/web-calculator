@@ -18,13 +18,49 @@ body {
 /* calculator */
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono');
 
+@media screen and (min-width:320px){
+    .calculator {
+        width: 80%;
+    }
+}
+
+@media screen and (min-width:481px){
+    .calculator {
+        width: 65%;
+    }
+}
+
+
+@media screen and (min-width:585px){
+    .calculator {
+        width: 50%;
+    }
+}
+
+@media screen and (min-width:900px){
+    .calculator {
+        width: 35%;
+    }
+}
+
+@media screen and (min-width:1200px){
+    .calculator {
+        width: 25%;
+    }
+}
+
+@media screen and (min-width:1400px){
+    .calculator {
+        width: 20%;
+    }
+}
+
+
 .calculator {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    width: fit-content;
-    max-width: 18rem;
-    padding: 1.2rem;
+    padding: 1rem;
     border-radius: 0.5rem;
     background-color: blueviolet;
     font-family: 'IBM Plex Mono', monospace;
