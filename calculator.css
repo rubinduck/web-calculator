@@ -1,3 +1,11 @@
+@import 'resets.css';
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono');
+.calculator * {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 3.5rem;
+}
+
 .calculator {
     display: flex;
     flex-direction: column;
