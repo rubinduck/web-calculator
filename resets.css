@@ -16,3 +16,9 @@ input[type='text'] {
     outline: none;
     box-sizing: border-box;
 }
+
+button {
+    display: block;
+    border: none;
+    padding: 0;
+}
