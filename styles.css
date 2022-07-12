@@ -1,4 +1,5 @@
 @import 'resets.css';
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
 
 /* general */
 html {
@@ -16,8 +17,6 @@ body {
 
 
 /* calculator */
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono');
-
 @media screen and (min-width:320px){
     .calculator {
         width: 80%;
@@ -54,7 +53,6 @@ body {
         width: 20%;
     }
 }
-
 
 .calculator {
     display: flex;
