@@ -1,4 +1,5 @@
 'use strict'
+import compute from './compute-function.js';
 
 const CALCULATOR_CLASS_ID = 'calculator';
 const INPUT_FIELD_ID = 'calculator__input-field';
@@ -40,6 +41,6 @@ class Calculator {
 
 function main(){
     const calclulatorElement = document.getElementById(CALCULATOR_CLASS_ID);
-    const calclulator = new Calculator(calclulatorElement, () => 42);
+    const calclulator = new Calculator(calclulatorElement, compute);
 }
 main();
