@@ -1,9 +1,9 @@
 'use strict'
 
-const CALCULATOR_CLASS_NAME = 'calculator';
-const INPUT_FIELD_CLASS_NAME = 'calculator__input-field';
+const CALCULATOR_CLASS_ID = 'calculator';
+const INPUT_FIELD_ID = 'calculator__input-field';
 const INPUT_BUTTON_CLASS_NAME = 'input-button';
-const ENTER_BUTTON_CLASS_NAME = 'enter-button';
+const ENTER_BUTTON_ID = 'enter-button';
 
 const getElementsByClassName = (parent, className) => 
     Array.from(parent.getElementsByClassName(className));
@@ -14,8 +14,7 @@ class Calculator {
     inputField;
     constructor(calculatorElement, computeFunction){
         this.computeFunction = computeFunction;
-        this.inputField = calculatorElement
-            .getElementsByClassName(INPUT_FIELD_CLASS_NAME)[0];
+        this.inputField = document.getElementById(INPUT_FIELD_ID);
         this.addHanlders(calculatorElement) 
     }
 
@@ -24,7 +23,7 @@ class Calculator {
         inputButtons.forEach(
             button => button.addEventListener('click', (e) => this.handleInputButtonClick(e)));
 
-        const enterButton = getElementsByClassName(calculatorElement, ENTER_BUTTON_CLASS_NAME)[0];
+        const enterButton = document.getElementById(ENTER_BUTTON_ID);
         enterButton.addEventListener('click', (e) => this.handleEnter());
     }
 
@@ -40,7 +39,7 @@ class Calculator {
 
 
 function main(){
-    const calclulatorElement = document.getElementsByClassName(CALCULATOR_CLASS_NAME)[0];
+    const calclulatorElement = document.getElementById(CALCULATOR_CLASS_ID);
     const calclulator = new Calculator(calclulatorElement, () => 42);
 }
 main();

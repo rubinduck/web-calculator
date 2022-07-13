@@ -19,43 +19,42 @@ body {
 
 /* calculator */
 @media screen and (min-width:320px){
-    .calculator {
+    #calculator {
         width: 80%;
     }
 }
 
 @media screen and (min-width:481px){
-    .calculator {
+    #calculator {
         width: 65%;
     }
 }
 
-
 @media screen and (min-width:585px){
-    .calculator {
+    #calculator {
         width: 50%;
     }
 }
 
 @media screen and (min-width:900px){
-    .calculator {
+    #calculator {
         width: 35%;
     }
 }
 
 @media screen and (min-width:1200px){
-    .calculator {
+    #calculator {
         width: 25%;
     }
 }
 
 @media screen and (min-width:1400px){
-    .calculator {
+    #calculator {
         width: 20%;
     }
 }
 
-.calculator {
+#calculator {
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -66,7 +65,7 @@ body {
     font-size: 3.5rem;
 }
 
-.calculator__input-field {
+#calculator__input-field {
     width: 100%;
     border: 2px solid black;
     text-align: right;
