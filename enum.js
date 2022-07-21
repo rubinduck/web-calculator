@@ -1,7 +1,7 @@
 const Enum = (...elements) => {
     const enumaratedObject = {};
     for (const element of elements){
-        enumaratedObject[element] = element;
+        enumaratedObject[element] = Symbol(element);
     }
     return Object.freeze(enumaratedObject);
 }
