@@ -1,5 +1,5 @@
 'use strict'
-import compute from './compute-function.js';
+import {compute} from './compute-function.js';
 
 const CALCULATOR_CLASS_ID = 'calculator';
 const INPUT_FIELD_ID = 'calculator__input-field';
