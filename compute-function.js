@@ -23,7 +23,7 @@ const getPrecendence = (opeator) => OPERATOR_TO_PRECEDENCE[opeator];
 const OPERATOR_ASSOCIATIVITY = {
     '+': 'left', '-': 'left', '*': 'left', '/': 'left'
 }
-const getAssociativity = (opeator) => OPERATOR_ASSOCIATIVITY[operator];
+const getAssociativity = (opeator) => OPERATOR_ASSOCIATIVITY[opeator];
 
 const TokenType = Enum(
     'Number',
@@ -154,4 +154,4 @@ const convertToRPN = (tokens) => {
     return outputQueue;
 }
 
-export {ExpressionContainsNonAllowedChars,compute};
+export {ExpressionContainsNonAllowedChars, compute};
