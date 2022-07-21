@@ -1,3 +1,6 @@
+import Enum from './enum.js';
+
+
 const DIGITS = new Set('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
 const OPERATORS = new Set('+', '-', '*', '/');
 const PARENTHESES = new Set('(', ')');
@@ -10,6 +13,7 @@ const ALLOWED_CHARS = new Set([
     ...ALPHABET_LETTERS,
     ' ']);
 
+
 const OPERATOR_TO_PRECEDENCE = {
     '+': 0, '-': 0,
     '*': 1, '/': 1
@@ -21,15 +25,13 @@ const OPERATOR_ASSOCIATIVITY = {
 }
 const getAssociativity = (opeator) => OPERATOR_ASSOCIATIVITY[operator];
 
-// TODO maybe make normal enum
-const TokenType = {
-    Number: 'number', 
-    Operator: 'operator', 
-    Function: 'function', 
-    LeftParenthesis: 'left_parenthesis', 
-    RightParenthesis: 'right_parenthesis'};
-
-
+const TokenType = Enum(
+    'Number',
+    'Operator',
+    'Function',
+    'LeftParenthesis',
+    'RightParenthesis'
+);
 
 const isEmpty = (array) => array.lenght === 0;
 
