@@ -119,45 +119,37 @@ const toTokens = (string) => {
 }
 
 const convertToRPN = (tokens) => {
-    const hasGreaterPrecedence = (operator1, operator2) =>
-        getPrecendence(operator1.value) > getPrecendence(operator2.value);
-    const hasEqualPrecednece = (operator1, operator2) =>
-        getPrecendence(operator1.value) === getPrecendence(operator2.value);
     tokens = [...tokens];
     const outputQueue = [];
     const operatorStack = [];
     while (!isEmpty(tokens)){
         const token = tokens.shift();
-        switch(token.type) {
-            case TokenType.Number:
-                outputQueue.push(token);
-                break;
-            case TokenType.Function:
-                operatorStack.push(token)
-                break;
-            case TokenType.Operator:
-                let lastOperator = operatorStack.at(-1)
-                while(!isEmpty(operatorStack) && 
-                      lastOperator.type !== TokenType.LeftParenthesis &&
-                      (hasGreaterPrecedence(lastOperator, token) ||
-                       hasEqualPrecednece(lastOperator, token), getAssociativity(token) === 'left')
-                      ){
-                        outputQueue.push(operatorStack.pop());
-                        lastOperator = operatorStack.at(-1);
-                }
-                operatorStack.push(token)
-                break;
-            case TokenType.LeftParenthesis:
-                operatorStack.push(token);
-            case TokenType.RightParenthesis:
-                while(operatorStack.at(-1).type !== TokenType.LeftParenthesis){
-                    // TODO make proper error
-                    if (isEmpty(operatorStack)) throw new Error('no left parenthesis');
+        if (token instanceof NumberToken){
+            outputQueue.push(token);
+        } else if (token instanceof FunctionToken){
+            operatorStack.push(token)
+        } else if (token instanceof OperatorToken){
+            let lastOperator = operatorStack.at(-1)
+            while(!isEmpty(operatorStack) &&
+                  !(lastOperator instanceof LeftParenthesisToken) &&
+                  (lastOperator.precendence > token.precendence ||
+                  (lastOperator.precendence === token.precendence && token.associativity === 'left'))
+                 ){
                     outputQueue.push(operatorStack.pop());
-                }
-                operatorStack.pop(); // removing left parenthesis
-                if (operatorStack.at(-1).type === TokenType.Function)
-                    outputQueue.push(operatorStack.pop());
+                    lastOperator = operatorStack.at(-1);
+            }
+            operatorStack.push(token)
+        } else if (token instanceof LeftParenthesisToken){
+            operatorStack.push(token);
+        } else if (token instanceof RightParenthesisToken){
+            while(!(operatorStack.at(-1) instanceof LeftParenthesisToken)){
+                // TODO make proper error
+                if (isEmpty(operatorStack)) throw new Error('no left parenthesis');
+                outputQueue.push(operatorStack.pop());
+            }
+            operatorStack.pop(); // removing left parenthesis
+            if (operatorStack.at(-1) instanceof FunctionToken)
+                outputQueue.push(operatorStack.pop());
         }
     }
 
