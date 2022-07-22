@@ -68,6 +68,7 @@ const compute = (expressionString) => {
     return 42;
 }
 
+// TODO rename
 const isValidExpression = (string) =>
     string.split('').every(char => ALLOWED_CHARS.has(char));
 
