@@ -84,10 +84,11 @@ const stringToTokens = (string) => {
     while(!isEmpty(chars)){
         const char = chars.shift();
         if (isDigit(char)){
-            let numberString = char;
+            const numberChars = [char]
+            // Maybe remove check for isEmpty
             while(!isEmpty(chars) && isDigit(chars[0]))
-                numberString += chars.shift();
-            tokens.push(new Token(new Number(numberString)));
+                numberChars.push(chars.shift())
+            tokens.push(new Token(new Number(numberChars.join())));
         } else if (isOperator(char)){
             tokens.push(new Token('operator'), char);
         } else if (isParenthesis(char)){
