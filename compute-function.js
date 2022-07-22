@@ -3,6 +3,7 @@ class Token {}
 class NumberToken extends Token {
     value;
     constructor(numberString){
+        super();
         this.value = new Number(numberString);
     }
 }
