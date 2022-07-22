@@ -1,8 +1,55 @@
-import Enum from './enum.js';
+class Token {}
+
+class NumberToken extends Token {
+    value;
+    constructor(numberString){
+        this.value = new Number(numberString);
+    }
+}
+
+//TODO extend function class
+class FunctionToken extends Token {
+    name;
+    constructor(name){
+        this.name = name;
+    }
+}
+
+class OperatorToken extends Token {
+    static allowedOperators = [
+        new OperatorToken('+', 0, 'left'),
+        new OperatorToken('-', 0, 'left'),
+        new OperatorToken('*', 0, 'left'),
+        new OperatorToken('/', 0, 'right')
+    ];
+
+    name;
+    precendence;
+    associativity;
+    constructor(name, precendence, associativity){
+        this.name = name;
+        this.precendence = precendence;
+        this.associativity = associativity;
+    }
+
+    static isOperator(string){
+        return this.allowedOperators.any(operator => operator.name === string);
+    }
+
+    static toOperator(string){
+        const operator = this.allowedOperators.find(operator.name === string);
+        // TODO make normal error
+        if (operator === undefined) throw new Error('no such operator');
+        return operator;
+    }
+}
+
+class LeftParenthesisToken extends Token {}
+class RightParenthesisToken extends Token {}
 
 
 const DIGITS = new Set('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
-const OPERATORS = new Set('+', '-', '*', '/');
+const OPERATORS = new Set(OperatorToken.allowedOperators.map(op => op.name))
 const PARENTHESES = new Set('(', ')');
 const ALPHABET_LETTERS = new Set(...('abcdefghijklmnopqrstuvwxyz'.split('')));
 const FUNCTIONS = new Set();
@@ -13,58 +60,18 @@ const ALLOWED_CHARS = new Set([
     ...ALPHABET_LETTERS,
     ' ']);
 
-
-const OPERATOR_TO_PRECEDENCE = {
-    '+': 0, '-': 0,
-    '*': 1, '/': 1
-}
-const getPrecendence = (opeator) => OPERATOR_TO_PRECEDENCE[opeator];
-// TODO make operator a class
-const OPERATOR_ASSOCIATIVITY = {
-    '+': 'left', '-': 'left', '*': 'left', '/': 'left'
-}
-const getAssociativity = (opeator) => OPERATOR_ASSOCIATIVITY[opeator];
-
-const TokenType = Enum(
-    'Number',
-    'Operator',
-    'Function',
-    'LeftParenthesis',
-    'RightParenthesis'
-);
-
 const isEmpty = (array) => array.lenght === 0;
-
-const isOperator = (char) => OPERATORS.has(char);
-const isNumber = (value) => typeof(value) === 'number';
-const isFunctionName = (string) => FUNCTIONS.has(string);
-
-const tokenValueToType = (tokenValue) => {
-    if (isNumber(tokenValue)) return TokenType.Number;
-    if (isOperator(tokenValue)) return TokenType.Operator;
-    if (isFunctionName(tokenValue)) return TokenType.Function;
-    if (tokenValue === '(') return TokenType.LeftParenthesis;
-    if (tokenValue === ')') return TokenType.RightParenthesis;
-    throw new Error('Incorrect token value');
-}
 
 // TODO add dot
 // TODO add functions
 
 class ExpressionContainsNonAllowedChars extends Error {}
 
-class Token {
-    constructor(value){
-        this.type = tokenValueToType(value);
-        this.value = value;
-    }
-}
 
 const compute = (expressionString) => {
     if (!isValidExpression(expressionString)) 
         throw new ExpressionContainsNonAllowedChars();
     const tokens = stringToTokens(expressionString);
-
     return 42;
 }
 
@@ -72,11 +79,10 @@ const compute = (expressionString) => {
 const isValidExpression = (string) =>
     string.split('').every(char => ALLOWED_CHARS.has(char));
 
-
-const isParenthesis = (char) => PARENTHESES.has(char);
 const isAlphabetLetter = (char) => ALPHABET_LETTERS.has(char);
 const isDigit = (char) => DIGITS.has(char);
 
+//TODO think about multichar operators
 const stringToTokens = (string) => {
     chars = string.replaceAll(' ', '')
                   .toLowerCase()
@@ -89,16 +95,19 @@ const stringToTokens = (string) => {
             // Maybe remove check for isEmpty
             while(!isEmpty(chars) && isDigit(chars[0]))
                 numberChars.push(chars.shift())
-            tokens.push(new Token(new Number(numberChars.join())));
-        } else if (isOperator(char)){
-            tokens.push(new Token('operator'), char);
-        } else if (isParenthesis(char)){
-            tokens.push(new Token(char));
+            const numberString = numberChars.join();
+            tokens.push(new NumberToken(numberString));
+        } else if (OperatorToken.isOperator(char)){
+            tokens.push(OperatorToken.toOperator(char));
+        } else if (char === '('){
+            tokens.push(new LeftParenthesisToken());
+        } else if (char === ')'){
+            tokens.push(new RightParenthesisToken());
         } else if (isAlphabetLetter(char)){
-            let functionName = char;
+            const functionNameChars = [char];
             while(!isEmpty(chars) && isAlphabetLetter(chars[0]))
-                functionName += chars.shift();
-            tokens.push(new Token(functionName));
+                functionNameChars.push(chars.shift());
+            tokens.push(new FunctionToken(functionNameChars.join()));
         }
     }
     return tokens;
