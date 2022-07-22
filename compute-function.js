@@ -74,14 +74,13 @@ class ExpressionContainsNonAllowedChars extends Error {}
 
 
 const compute = (expressionString) => {
-    if (!isValidExpression(expressionString)) 
+    if (!hasOnlyAllowedChars(expressionString))
         throw new ExpressionContainsNonAllowedChars();
     const tokens = toTokens(expressionString);
     return 42;
 }
 
-// TODO rename
-const isValidExpression = (string) =>
+const hasOnlyAllowedChars = (string) =>
     string.split('').every(char => ALLOWED_CHARS.has(char));
 
 const isAlphabetLetter = (char) => ALPHABET_LETTERS.has(char);
