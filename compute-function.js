@@ -64,7 +64,7 @@ const ALLOWED_CHARS = new Set([
     ...ALPHABET_LETTERS,
     ' ']);
 
-const isEmpty = (array) => array.lenght === 0;
+const isEmpty = (array) => array.length === 0;
 
 // TODO add dot
 // TODO add functions
