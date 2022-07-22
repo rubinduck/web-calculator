@@ -32,12 +32,14 @@ class OperatorToken extends Token {
         this.associativity = associativity;
     }
 
-    static isOperator(string){
-        return this.allowedOperators.any(operator => operator.name === string);
-    }
+    static findOperatorByName = (string) =>
+        this.allowedOperators.any(operator => operator.name === string);
+
+    static isOperator = (string) =>
+        this.findOperatorByName(string) !== undefined;
 
     static from(string){
-        const operator = this.allowedOperators.find(operator.name === string);
+        const operator = this.findOperatorByName(string);
         // TODO make normal error
         if (operator === undefined) throw new Error('no such operator');
         return operator;
