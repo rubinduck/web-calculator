@@ -100,7 +100,7 @@ const toTokens = (string) => {
             // Maybe remove check for isEmpty
             while(!isEmpty(chars) && isDigit(chars[0]))
                 numberChars.push(chars.shift())
-            const numberString = numberChars.join();
+            const numberString = numberChars.join('');
             tokens.push(new NumberToken(numberString));
         } else if (OperatorToken.isOperator(char)){
             tokens.push(OperatorToken.from(char));
@@ -112,7 +112,7 @@ const toTokens = (string) => {
             const functionNameChars = [char];
             while(!isEmpty(chars) && isAlphabetLetter(chars[0]))
                 functionNameChars.push(chars.shift());
-            tokens.push(new FunctionToken(functionNameChars.join()));
+            tokens.push(new FunctionToken(functionNameChars.join('')));
         }
     }
     return tokens;
