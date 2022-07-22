@@ -73,7 +73,7 @@ class ExpressionContainsNonAllowedChars extends Error {}
 const compute = (expressionString) => {
     if (!isValidExpression(expressionString)) 
         throw new ExpressionContainsNonAllowedChars();
-    const tokens = stringToTokens(expressionString);
+    const tokens = toTokens(expressionString);
     return 42;
 }
 
@@ -85,7 +85,7 @@ const isAlphabetLetter = (char) => ALPHABET_LETTERS.has(char);
 const isDigit = (char) => DIGITS.has(char);
 
 //TODO think about multichar operators
-const stringToTokens = (string) => {
+const toTokens = (string) => {
     chars = string.replaceAll(' ', '')
                   .toLowerCase()
                   .split('');
