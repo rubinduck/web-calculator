@@ -35,7 +35,7 @@ class OperatorToken extends Token {
     }
 
     static findOperatorByName = (string) =>
-        this.allowedOperators.any(operator => operator.name === string);
+        this.allowedOperators.some(operator => operator.name === string);
 
     static isOperator = (string) =>
         this.findOperatorByName(string) !== undefined;
