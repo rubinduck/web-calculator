@@ -53,10 +53,10 @@ class LeftParenthesisToken extends Token {}
 class RightParenthesisToken extends Token {}
 
 
-const DIGITS = new Set('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+const DIGITS = new Set(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
 const OPERATORS = new Set(OperatorToken.allowedOperators.map(op => op.name))
-const PARENTHESES = new Set('(', ')');
-const ALPHABET_LETTERS = new Set(...('abcdefghijklmnopqrstuvwxyz'.split('')));
+const PARENTHESES = new Set(['(', ')']);
+const ALPHABET_LETTERS = new Set('abcdefghijklmnopqrstuvwxyz'.split(''));
 const FUNCTIONS = new Set();
 const ALLOWED_CHARS = new Set([
     ...DIGITS, 
