@@ -36,7 +36,7 @@ class OperatorToken extends Token {
         return this.allowedOperators.any(operator => operator.name === string);
     }
 
-    static toOperator(string){
+    static from(string){
         const operator = this.allowedOperators.find(operator.name === string);
         // TODO make normal error
         if (operator === undefined) throw new Error('no such operator');
@@ -98,7 +98,7 @@ const stringToTokens = (string) => {
             const numberString = numberChars.join();
             tokens.push(new NumberToken(numberString));
         } else if (OperatorToken.isOperator(char)){
-            tokens.push(OperatorToken.toOperator(char));
+            tokens.push(OperatorToken.from(char));
         } else if (char === '('){
             tokens.push(new LeftParenthesisToken());
         } else if (char === ')'){
