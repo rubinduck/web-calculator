@@ -11,6 +11,7 @@ class NumberToken extends Token {
 class FunctionToken extends Token {
     name;
     constructor(name){
+        super();
         this.name = name;
     }
 }
@@ -27,6 +28,7 @@ class OperatorToken extends Token {
     precendence;
     associativity;
     constructor(name, precendence, associativity){
+        super();
         this.name = name;
         this.precendence = precendence;
         this.associativity = associativity;
