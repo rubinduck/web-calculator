@@ -1,3 +1,5 @@
+import genEnum from './enum.js';
+
 class Token {}
 
 class NumberToken extends Token {
@@ -10,7 +12,10 @@ class NumberToken extends Token {
     toString = () => this.value.toString();
 }
 
-//TODO extend function class
+const Associativity = genEnum('Left', 'Right');
+const Arity = genEnum('Unary', 'Binary');
+
+// TODO unite function with Operator maybe
 class FunctionToken extends Token {
     name;
     constructor(name){
@@ -23,20 +28,21 @@ class FunctionToken extends Token {
 
 class OperatorToken extends Token {
     static allowedOperators = [
-        new OperatorToken('+', 0, 'left'),
-        new OperatorToken('-', 0, 'left'),
-        new OperatorToken('*', 0, 'left'),
-        new OperatorToken('/', 0, 'left')
+        new OperatorToken('+', 0, Associativity.Left, (a, b) => a + b),
+        new OperatorToken('-', 0, Associativity.Left, (a,b) => a - b),
+        new OperatorToken('*', 1, Associativity.Left, (a,b) => a * b),
+        new OperatorToken('/', 1, Associativity.Left, (a,b) => a / b)
     ];
 
     name;
     precendence;
     associativity;
-    constructor(name, precendence, associativity){
+    constructor(name, precendence, associativity, evaluate){
         super();
         this.name = name;
-        this.precendence = precendence;
+        this.precendence = precendence;(a,b) => a - b
         this.associativity = associativity;
+        this.evaluate = evaluate;
     }
 
     static findOperatorByName = (string) =>
@@ -151,7 +157,7 @@ const convertToRPN = (tokens) => {
                 while(!isEmpty(operatorStack) &&
                       !(lastOperator instanceof LeftParenthesisToken) &&
                       (lastOperator.precendence > token.precendence ||
-                      (lastOperator.precendence === token.precendence && token.associativity === 'left'))
+                      (lastOperator.precendence === token.precendence && token.associativity === Associativity.Left))
                      ){
                         outputQueue.push(operatorStack.pop());
                         lastOperator = operatorStack.at(-1);
