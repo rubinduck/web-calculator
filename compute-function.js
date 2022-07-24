@@ -183,4 +183,4 @@ const convertToRPN = (tokens) => {
     return outputQueue;
 }
 
-export {ExpressionContainsNonAllowedChars, compute};
+export {ComputeError, compute};
