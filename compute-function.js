@@ -26,13 +26,17 @@ class FunctionToken extends Token {
     toString = () => this.name;
 }
 
+const ALLOWED_OPERATORS = [
+    ['+', 0, Associativity.Left, Arity.Binary, (a, b) => a + b],
+    ['-', 0, Associativity.Left, Arity.Binary, (a,b) => a - b],
+    ['*', 1, Associativity.Left, Arity.Binary, (a,b) => a * b],
+    ['/', 1, Associativity.Left, Arity.Binary, (a,b) => a / b],
+
+    ['sin', 2, Associativity.Right, Arity.Unary, x => Math.sin(x)],
+    ['cos', 2, Associativity.Right, Arity.Unary, x => Math.cos(x)]
+];
 class OperatorToken extends Token {
-    static allowedOperators = [
-        new OperatorToken('+', 0, Associativity.Left, Arity.Binary, (a, b) => a + b),
-        new OperatorToken('-', 0, Associativity.Left, Arity.Binary, (a,b) => a - b),
-        new OperatorToken('*', 1, Associativity.Left, Arity.Binary, (a,b) => a * b),
-        new OperatorToken('/', 1, Associativity.Left, Arity.Binary, (a,b) => a / b)
-    ];
+    static allowedOperators = ALLOWED_OPERATORS.map(op => new OperatorToken(...op));
 
     name;
     precendence;
