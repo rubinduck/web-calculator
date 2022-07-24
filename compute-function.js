@@ -123,32 +123,38 @@ const convertToRPN = (tokens) => {
     const operatorStack = [];
     while (!isEmpty(tokens)){
         const token = tokens.shift();
-        if (token instanceof NumberToken){
-            outputQueue.push(token);
-        } else if (token instanceof FunctionToken){
-            operatorStack.push(token)
-        } else if (token instanceof OperatorToken){
-            let lastOperator = operatorStack.at(-1)
-            while(!isEmpty(operatorStack) &&
-                  !(lastOperator instanceof LeftParenthesisToken) &&
-                  (lastOperator.precendence > token.precendence ||
-                  (lastOperator.precendence === token.precendence && token.associativity === 'left'))
-                 ){
+        switch (token.constructor){
+            case NumberToken:
+                outputQueue.push(token);
+                break;
+            case FunctionToken:
+                operatorStack.push(token)
+                break;
+            case OperatorToken:
+                let lastOperator = operatorStack.at(-1)
+                while(!isEmpty(operatorStack) &&
+                      !(lastOperator instanceof LeftParenthesisToken) &&
+                      (lastOperator.precendence > token.precendence ||
+                      (lastOperator.precendence === token.precendence && token.associativity === 'left'))
+                     ){
+                        outputQueue.push(operatorStack.pop());
+                        lastOperator = operatorStack.at(-1);
+                }
+                operatorStack.push(token)
+                break;
+            case LeftParenthesisToken:
+                operatorStack.push(token);
+                break;
+            case RightParenthesisToken:
+                while(!(operatorStack.at(-1) instanceof LeftParenthesisToken)){
+                    // TODO make proper error
+                    if (isEmpty(operatorStack)) throw new Error('no left parenthesis');
                     outputQueue.push(operatorStack.pop());
-                    lastOperator = operatorStack.at(-1);
-            }
-            operatorStack.push(token)
-        } else if (token instanceof LeftParenthesisToken){
-            operatorStack.push(token);
-        } else if (token instanceof RightParenthesisToken){
-            while(!(operatorStack.at(-1) instanceof LeftParenthesisToken)){
-                // TODO make proper error
-                if (isEmpty(operatorStack)) throw new Error('no left parenthesis');
-                outputQueue.push(operatorStack.pop());
-            }
-            operatorStack.pop(); // removing left parenthesis
-            if (operatorStack.at(-1) instanceof FunctionToken)
-                outputQueue.push(operatorStack.pop());
+                }
+                operatorStack.pop(); // removing left parenthesis
+                if (operatorStack.at(-1) instanceof FunctionToken)
+                    outputQueue.push(operatorStack.pop());
+                break;
         }
     }
 
