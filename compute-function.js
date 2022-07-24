@@ -6,6 +6,8 @@ class NumberToken extends Token {
         super();
         this.value = new Number(numberString);
     }
+
+    toString = () => this.value.toString();
 }
 
 //TODO extend function class
@@ -15,6 +17,8 @@ class FunctionToken extends Token {
         super();
         this.name = name;
     }
+
+    toString = () => this.name;
 }
 
 class OperatorToken extends Token {
@@ -48,10 +52,17 @@ class OperatorToken extends Token {
             throw new ComputeError(`Operator [${string}] doesn't exist`);
         return operator;
     }
+
+    toString = () => this.name;
 }
 
-class LeftParenthesisToken extends Token {}
-class RightParenthesisToken extends Token {}
+class LeftParenthesisToken extends Token {
+    toString = () => '(';
+}
+
+class RightParenthesisToken extends Token {
+    toString = () => ')';
+}
 
 
 const DIGITS = new Set(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
