@@ -22,7 +22,7 @@ class OperatorToken extends Token {
         new OperatorToken('+', 0, 'left'),
         new OperatorToken('-', 0, 'left'),
         new OperatorToken('*', 0, 'left'),
-        new OperatorToken('/', 0, 'right')
+        new OperatorToken('/', 0, 'left')
     ];
 
     name;
