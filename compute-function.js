@@ -28,20 +28,23 @@ class FunctionToken extends Token {
 
 class OperatorToken extends Token {
     static allowedOperators = [
-        new OperatorToken('+', 0, Associativity.Left, (a, b) => a + b),
-        new OperatorToken('-', 0, Associativity.Left, (a,b) => a - b),
-        new OperatorToken('*', 1, Associativity.Left, (a,b) => a * b),
-        new OperatorToken('/', 1, Associativity.Left, (a,b) => a / b)
+        new OperatorToken('+', 0, Associativity.Left, Arity.Binary, (a, b) => a + b),
+        new OperatorToken('-', 0, Associativity.Left, Arity.Binary, (a,b) => a - b),
+        new OperatorToken('*', 1, Associativity.Left, Arity.Binary, (a,b) => a * b),
+        new OperatorToken('/', 1, Associativity.Left, Arity.Binary, (a,b) => a / b)
     ];
 
     name;
     precendence;
     associativity;
-    constructor(name, precendence, associativity, evaluate){
+    arity;
+    evaluate;
+    constructor(name, precendence, associativity, arity, evaluate){
         super();
         this.name = name;
         this.precendence = precendence;(a,b) => a - b
         this.associativity = associativity;
+        this.arity = arity;
         this.evaluate = evaluate;
     }
 
