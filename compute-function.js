@@ -44,7 +44,8 @@ class OperatorToken extends Token {
     static from(string){
         const operator = this.findOperatorByName(string);
         // TODO make normal error
-        if (operator === undefined) throw new Error('no such operator');
+        if (operator === undefined)
+            throw new ComputeError(`Operator [${string}] doesn't exist`);
         return operator;
     }
 }
@@ -70,12 +71,16 @@ const isEmpty = (array) => array.length === 0;
 // TODO add dot
 // TODO add functions
 
-class ExpressionContainsNonAllowedChars extends Error {}
+class ComputeError extends Error {
+    constructor(message=''){
+        this.message = message
+    }
+}
 
 
 const compute = (expressionString) => {
     if (!hasOnlyAllowedChars(expressionString))
-        throw new ExpressionContainsNonAllowedChars();
+        throw new ComputeError('Expression contains not allowed charactes');
     const tokens = toTokens(expressionString);
     return 42;
 }
@@ -147,8 +152,8 @@ const convertToRPN = (tokens) => {
                 break;
             case RightParenthesisToken:
                 while(!(operatorStack.at(-1) instanceof LeftParenthesisToken)){
-                    // TODO make proper error
-                    if (isEmpty(operatorStack)) throw new Error('no left parenthesis');
+                    if (isEmpty(operatorStack))
+                        throw new ComputeError('Right parenthesis present, but no opening left one');
                     outputQueue.push(operatorStack.pop());
                 }
                 operatorStack.pop(); // removing left parenthesis
