@@ -176,8 +176,8 @@ const convertToRPN = (tokens) => {
 
     while(!isEmpty(operatorStack)){
         const operator = operatorStack.pop();
-        // TODO make proper error
-        if (operator instanceof LeftParenthesisToken) throw new Error('no right parenthesis');
+        if (operator instanceof LeftParenthesisToken)
+            throw new ComputeError('Left parenthesis present, but no closing right one');
         outputQueue.push(operator);
     }
     return outputQueue;
