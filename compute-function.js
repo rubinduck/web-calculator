@@ -3,13 +3,13 @@ import genEnum from './enum.js';
 class Token {}
 
 class NumberToken extends Token {
-    value;
+    number;
     constructor(numberString){
         super();
-        this.value = new Number(numberString);
+        this.number = new Number(numberString);
     }
 
-    toString = () => this.value.toString();
+    toString = () => this.number.toString();
 }
 
 const Associativity = genEnum('Left', 'Right');
