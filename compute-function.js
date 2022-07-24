@@ -147,7 +147,7 @@ const convertToRPN = (tokens) => {
                 operatorStack.push(token)
                 break;
             case OperatorToken:
-                let lastOperator = operatorStack.at(-1)
+                let lastOperator = operatorStack.at(-1);
                 while(!isEmpty(operatorStack) &&
                       !(lastOperator instanceof LeftParenthesisToken) &&
                       (lastOperator.precendence > token.precendence ||
