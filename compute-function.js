@@ -1,4 +1,9 @@
+// TODO add float numbers
+// TODO add unary + and -
 import genEnum from './enum.js';
+
+
+const isEmpty = (array) => array.length === 0;
 
 class Token {}
 
@@ -13,109 +18,96 @@ class NumberToken extends Token {
 }
 
 const Associativity = genEnum('Left', 'Right');
-const Arity = genEnum('Unary', 'Binary');
-
-// TODO unite function with Operator maybe
-class FunctionToken extends Token {
-    name;
-    constructor(name){
-        super();
-        this.name = name;
-    }
-
-    toString = () => this.name;
-}
-
-const ALLOWED_OPERATORS = [
-    ['+', 0, Associativity.Left, Arity.Binary, (a, b) => a + b],
-    ['-', 0, Associativity.Left, Arity.Binary, (a,b) => a - b],
-    ['*', 1, Associativity.Left, Arity.Binary, (a,b) => a * b],
-    ['/', 1, Associativity.Left, Arity.Binary, (a,b) => a / b],
-
-    ['sin', 2, Associativity.Right, Arity.Unary, x => Math.sin(x)],
-    ['cos', 2, Associativity.Right, Arity.Unary, x => Math.cos(x)]
-];
-class OperatorToken extends Token {
-    static allowedOperators = ALLOWED_OPERATORS.map(op => new OperatorToken(...op));
-
+class UnaryOperator extends Token {
     name;
     precendence;
-    associativity;
-    arity;
     evaluate;
-    constructor(name, precendence, associativity, arity, evaluate){
+    constructor(name, precendence, evaluate){
         super();
         this.name = name;
-        this.precendence = precendence;(a,b) => a - b
-        this.associativity = associativity;
-        this.arity = arity;
+        this.precendence = precendence;
         this.evaluate = evaluate;
     }
 
-    static findOperatorByName = (string) =>
-        this.allowedOperators.find(operator => operator.name === string);
+    toString = () => this.name;
+}
 
-    static isOperator = (string) =>
-        this.findOperatorByName(string) !== undefined;
-
-    static from(string){
-        const operator = this.findOperatorByName(string);
-        // TODO make normal error
-        if (operator === undefined)
-            throw new ComputeError(`Operator [${string}] doesn't exist`);
-        return operator;
+class BinaryOperator extends Token {
+    name;
+    precendence;
+    associativity;
+    evaluate;
+    constructor(name, precendence, associativity, evaluate){
+        super();
+        this.name = name;
+        this.precendence = precendence;
+        this.associativity = associativity;
+        this.evaluate = evaluate;
     }
 
     toString = () => this.name;
 }
+
+
+// name, precendence, function
+const UNARI_OPERATORS = [
+    ['sin', 2, x => Math.sin(x)],
+    ['cos', 2, x => Math.cos(x)]]
+    .map(args => new UnaryOperator(...args));
+
+// name, precendence, associativity, funciton
+const BINARY_OPEARATORS = [
+    ['+', 0, Associativity.Left, (a, b) => a + b],
+    ['-', 0, Associativity.Left, (a,b) => a - b],
+    ['*', 1, Associativity.Left, (a,b) => a * b],
+    ['/', 1, Associativity.Left, (a,b) => a / b]]
+    .map(args => new BinaryOperator(...args));
+
+
+class OperatorProvider {
+    static nameToOpearator = OperatorProvider.computeOperatorsMap()
+
+    static computeOperatorsMap(){
+        const operators = UNARI_OPERATORS.concat(BINARY_OPEARATORS);
+        return new Map(operators.map(op => [op.name, op]))
+    }
+
+    static operatorExists = (operatorName) => 
+        OperatorProvider.nameToOpearator.has(operatorName);
+    
+    static getOperator = (operatorName) =>
+        OperatorProvider.nameToOpearator.get(operatorName);
+}
+
 
 class LeftParenthesisToken extends Token {
     toString = () => '(';
 }
+
 
 class RightParenthesisToken extends Token {
     toString = () => ')';
 }
 
 
-const DIGITS = new Set(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
-const OPERATORS = new Set(OperatorToken.allowedOperators.map(op => op.name))
-const PARENTHESES = new Set(['(', ')']);
-const ALPHABET_LETTERS = new Set('abcdefghijklmnopqrstuvwxyz'.split(''));
-const FUNCTIONS = new Set();
-const ALLOWED_CHARS = new Set([
-    ...DIGITS, 
-    ...OPERATORS, 
-    ...PARENTHESES,
-    ...ALPHABET_LETTERS,
-    ' ']);
-
-const isEmpty = (array) => array.length === 0;
-
-// TODO add dot
-// TODO add functions
-
 class ComputeError extends Error {
     constructor(message=''){
+        super();
         this.message = message
     }
 }
 
 
 const compute = (expressionString) => {
-    if (!hasOnlyAllowedChars(expressionString))
-        throw new ComputeError('Expression contains not allowed charactes');
     const tokens = toTokens(expressionString);
     return 42;
 }
 
-const hasOnlyAllowedChars = (string) =>
-    string.split('').every(char => ALLOWED_CHARS.has(char));
-
+const DIGITS = new Set(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
+const ALPHABET_LETTERS = new Set('abcdefghijklmnopqrstuvwxyz'.split(''));
 const isAlphabetLetter = (char) => ALPHABET_LETTERS.has(char);
 const isDigit = (char) => DIGITS.has(char);
 
-//TODO think about multichar operators
 const toTokens = (string) => {
     chars = string.replaceAll(' ', '')
                   .toLowerCase()
@@ -123,24 +115,30 @@ const toTokens = (string) => {
     const tokens = [];
     while(!isEmpty(chars)){
         const char = chars.shift();
-        if (isDigit(char)){
+        if (char === '('){
+            tokens.push(new LeftParenthesisToken());
+        } else if (char === ')'){
+            tokens.push(new RightParenthesisToken());
+        } else if (isDigit(char)){
             const numberChars = [char]
             // Maybe remove check for isEmpty
             while(!isEmpty(chars) && isDigit(chars[0]))
                 numberChars.push(chars.shift())
             const numberString = numberChars.join('');
             tokens.push(new NumberToken(numberString));
-        } else if (OperatorToken.isOperator(char)){
-            tokens.push(OperatorToken.from(char));
-        } else if (char === '('){
-            tokens.push(new LeftParenthesisToken());
-        } else if (char === ')'){
-            tokens.push(new RightParenthesisToken());
         } else if (isAlphabetLetter(char)){
             const functionNameChars = [char];
             while(!isEmpty(chars) && isAlphabetLetter(chars[0]))
                 functionNameChars.push(chars.shift());
-            tokens.push(new FunctionToken(functionNameChars.join('')));
+            const functionName = functionNameChars.join('');
+            if (!OperatorProvider.operatorExists(functionName))
+                throw new ComputeError(`Operator [${functionName}] doesn't exist`);
+            tokens.push(OperatorProvider.getOperator(functionName));
+        // if it is not parenthesis, number or function name
+        } else if (OperatorProvider.operatorExists(char)){
+            tokens.push(OperatorProvider.getOperator(char));
+        } else {
+            throw new ComputeError(`Character [${char}] doesn't match any rules`);
         }
     }
     return tokens;
@@ -156,10 +154,10 @@ const convertToRPN = (tokens) => {
             case NumberToken:
                 outputQueue.push(token);
                 break;
-            case FunctionToken:
+            case UnaryOperator:
                 operatorStack.push(token)
                 break;
-            case OperatorToken:
+            case BinaryOperator:
                 let lastOperator = operatorStack.at(-1);
                 while(!isEmpty(operatorStack) &&
                       !(lastOperator instanceof LeftParenthesisToken) &&
@@ -181,7 +179,7 @@ const convertToRPN = (tokens) => {
                     outputQueue.push(operatorStack.pop());
                 }
                 operatorStack.pop(); // removing left parenthesis
-                if (operatorStack.at(-1) instanceof FunctionToken)
+                if (operatorStack.at(-1) instanceof UnaryOperator)
                     outputQueue.push(operatorStack.pop());
                 break;
         }
