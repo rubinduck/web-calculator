@@ -118,23 +118,23 @@ const toTokens = (string) => {
     while(!isEmpty(chars)){
         const char = chars.shift();
         let token;
-        if (char === '('){
+        if (char === '(')
             token = new LeftParenthesis();
-        } else if (char === ')'){
+        else if (char === ')')
             token = new RightParenthesis();
-        } else if (isDigit(char)){
+        else if (isDigit(char))
             token = parseNumberToken(char, chars);
-        } else if (isAlphabetLetter(char)){
+        else if (isAlphabetLetter(char))
             token = parseFuncitonToken(char, chars);
-        } else if (binaryOperatorExists(char) && unaryOperatorExists){
+        else if (binaryOperatorExists(char) && unaryOperatorExists)
             token = parseMiltiarityOperator(char, tokens);
-        } else if (binaryOperatorExists(char)){
+        else if (binaryOperatorExists(char))
             token = getBinaryOperator(char);
-        } else if (unaryOperatorExists(char)){
+        else if (unaryOperatorExists(char))
             token = getUnaryOperator(char);
-        } else {
-            throw new ComputeError(`Character [${char}] doesn't match any rules`);
-        }
+        else
+            throw new ComputeError(`Character [$char] doesn't match any rules`);
+
         tokens.push(token);
     }
     return tokens;
