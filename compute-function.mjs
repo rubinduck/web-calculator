@@ -51,6 +51,8 @@ class BinaryOperator extends Token {
 
 // name, precendence, function
 const UNARY_OPERATORS = [
+    ['+', 0, x => x],
+    ['-', 0 x => -x],
     ['sin', 2, x => Math.sin(x)],
     ['cos', 2, x => Math.cos(x)]]
     .map(args => new UnaryOperator(...args));
@@ -120,6 +122,19 @@ const toTokens = (string) => {
         return getUnaryOperator(operatorName);
     }
 
+    const parseMiltiarityOperator = (char, tokens) => {
+        const previousTokenType = tokens.at(-1)?.constructor;
+        // if ther is no previous token or it was ')' or Binary operator, than
+        // next operator is unary
+        // TODO rename Parenthesis tokens
+        if (previousTokenType in [undefined, LeftParenthesisToken, BinaryOperator])
+            return getUnaryOperator(char);
+        if (previousTokenType in [RightParenthesisToken, NumberToken])
+            return getBinaryOperator(char);
+        // only left option for previous token is unary operator 
+        throw new ComputeError(`Operator ${char} can't follow unary opearotr`);
+    }
+
     const chars = string.replaceAll(' ', '')
                   .toLowerCase()
                   .split('');
@@ -132,6 +147,7 @@ const toTokens = (string) => {
         } else if (char === ')'){
             token = new RightParenthesisToken();
         } else if (isDigit(char)){
+            // TODO move digit parsing to separate function
             const numberChars = [char]
             // Maybe remove check for isEmpty
             while(!isEmpty(chars) && isDigit(chars[0]))
@@ -140,9 +156,11 @@ const toTokens = (string) => {
             token = new NumberToken(numberString);
         } else if (isAlphabetLetter(char)){
             token = parseFuncitonToken(char, chars);
-        } else if (binaryOperatorExists(char) && !unaryOperatorExists(char)){
+        } else if (binaryOperatorExists(char) && unaryOperatorExists){
+            token = parseMiltiarityOperator(char, tokens);
+        } else if (binaryOperatorExists(char)){
             token = getBinaryOperator(char);
-        } else if (!binaryOperatorExists(char) && unaryOperatorExists(char)){
+        } else if (unaryOperatorExists(char)){
             token = getUnaryOperator(char);
         } else {
             throw new ComputeError(`Character [${char}] doesn't match any rules`);
