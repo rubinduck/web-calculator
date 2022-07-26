@@ -82,12 +82,12 @@ const binaryOperatorExists = (operatorName) =>
     getBinaryOperator(operatorName) !== undefined;
 
 
-class LeftParenthesisToken extends Token {
+class LeftParenthesis extends Token {
     toString = () => '(';
 }
 
 
-class RightParenthesisToken extends Token {
+class RightParenthesis extends Token {
     toString = () => ')';
 }
 
@@ -126,10 +126,9 @@ const toTokens = (string) => {
         const previousTokenType = tokens.at(-1)?.constructor;
         // if ther is no previous token or it was ')' or Binary operator, than
         // next operator is unary
-        // TODO rename Parenthesis tokens
-        if (previousTokenType in [undefined, LeftParenthesisToken, BinaryOperator])
+        if (previousTokenType in [undefined, LeftParenthesis, BinaryOperator])
             return getUnaryOperator(char);
-        if (previousTokenType in [RightParenthesisToken, NumberToken])
+        if (previousTokenType in [RightParenthesis, NumberToken])
             return getBinaryOperator(char);
         // only left option for previous token is unary operator 
         throw new ComputeError(`Operator ${char} can't follow unary opearotr`);
@@ -143,9 +142,9 @@ const toTokens = (string) => {
         const char = chars.shift();
         let token;
         if (char === '('){
-            token = new LeftParenthesisToken();
+            token = new LeftParenthesis();
         } else if (char === ')'){
-            token = new RightParenthesisToken();
+            token = new RightParenthesis();
         } else if (isDigit(char)){
             // TODO move digit parsing to separate function
             const numberChars = [char]
@@ -186,7 +185,7 @@ const convertToRPN = (tokens) => {
             case BinaryOperator:
                 let lastOperator = operatorStack.at(-1);
                 while(!isEmpty(operatorStack) &&
-                      !(lastOperator instanceof LeftParenthesisToken) &&
+                      !(lastOperator instanceof LeftParenthesis) &&
                       (lastOperator.precendence > token.precendence ||
                       (lastOperator.precendence === token.precendence && token.associativity === Associativity.Left))
                      ){
@@ -195,11 +194,11 @@ const convertToRPN = (tokens) => {
                 }
                 operatorStack.push(token)
                 break;
-            case LeftParenthesisToken:
+            case LeftParenthesis:
                 operatorStack.push(token);
                 break;
-            case RightParenthesisToken:
-                while(!(operatorStack.at(-1) instanceof LeftParenthesisToken)){
+            case RightParenthesis:
+                while(!(operatorStack.at(-1) instanceof LeftParenthesis)){
                     if (isEmpty(operatorStack))
                         throw new ComputeError('Right parenthesis present, but no opening left one');
                     outputQueue.push(operatorStack.pop());
@@ -213,7 +212,7 @@ const convertToRPN = (tokens) => {
 
     while(!isEmpty(operatorStack)){
         const operator = operatorStack.pop();
-        if (operator instanceof LeftParenthesisToken)
+        if (operator instanceof LeftParenthesis)
             throw new ComputeError('Left parenthesis present, but no closing right one');
         outputQueue.push(operator);
     }
@@ -251,6 +250,6 @@ const inputs = [
     '35', 'sin(5)', '7*5 /4* + 7',
     '4-sin(5)+7', 
     '7*5 /4* sin(7 )'];
-// for (const input of inputs)
-    // console.log([input, RpnToString(convertToRPN(toTokens(input)))])
+for (const input of inputs)
+    console.log([input, RpnToString(convertToRPN(toTokens(input)))])
 export {ComputeError, compute};
