@@ -34,8 +34,13 @@ class Calculator {
     }
 
     handleEnter(){
-        this.inputField.value = this.computeFunction(this.inputField.value);
+        const computationResult = this.computeFunction(this.inputField.value)
+        this.inputField.value = Calculator.round(computationResult, 5);
     }
+
+    // toFixed returns string, so we need to turn it back to number
+    static round = (number, n) =>
+        Number(number.toFixed(n));
 }
 
 
