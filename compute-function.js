@@ -114,37 +114,45 @@ const isAlphabetLetter = (char) => ALPHABET_LETTERS.has(char);
 const isDigit = (char) => DIGITS.has(char);
 
 const toTokens = (string) => {
+    const parseFuncitonToken = (firstLetter, chars) => {
+        const operatorNameChars = [firstLetter];
+        while(!isEmpty(chars) && isAlphabetLetter(chars[0]))
+            operatorNameChars.push(chars.shift());
+        const operatorName = operatorNameChars.join('');
+        // multicharacter operator from letters can be only unary
+        if (!OperatorProvider.unaryOperatorExists(operatorName))
+            throw new ComputeError(`Operator [${operatorName}] doesn't exist`);
+        return OperatorProvider.getUnaryOperator(operatorName);
+    }
+
     chars = string.replaceAll(' ', '')
                   .toLowerCase()
                   .split('');
     const tokens = [];
     while(!isEmpty(chars)){
         const char = chars.shift();
+        let token;
         if (char === '('){
-            tokens.push(new LeftParenthesisToken());
+            token = new LeftParenthesisToken();
         } else if (char === ')'){
-            tokens.push(new RightParenthesisToken());
+            token = new RightParenthesisToken();
         } else if (isDigit(char)){
             const numberChars = [char]
             // Maybe remove check for isEmpty
             while(!isEmpty(chars) && isDigit(chars[0]))
                 numberChars.push(chars.shift())
             const numberString = numberChars.join('');
-            tokens.push(new NumberToken(numberString));
+            token = new NumberToken(numberString);
         } else if (isAlphabetLetter(char)){
-            const functionNameChars = [char];
-            while(!isEmpty(chars) && isAlphabetLetter(chars[0]))
-                functionNameChars.push(chars.shift());
-            const functionName = functionNameChars.join('');
-            if (!OperatorProvider.operatorExists(functionName))
-                throw new ComputeError(`Operator [${functionName}] doesn't exist`);
-            tokens.push(OperatorProvider.getOperator(functionName));
-        // if it is not parenthesis, number or function name
-        } else if (OperatorProvider.operatorExists(char)){
-            tokens.push(OperatorProvider.getOperator(char));
+            token = parseFuncitonToken(char, chars);
+        } else if (OperatorProvider.binaryOperatorExists(char) && !OperatorProvider.unaryOperatorExists(char)){
+            token = OperatorProvider.getBinaryOperator(char);
+        } else if (!OperatorProvider.binaryOperatorExists(char) && OperatorProvider.unaryOperatorExists(char)){
+            token = OperatorProvider.getUnaryOperator(char);
         } else {
             throw new ComputeError(`Character [${char}] doesn't match any rules`);
         }
+        tokens.push(token);
     }
     return tokens;
 }
