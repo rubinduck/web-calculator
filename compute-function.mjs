@@ -102,7 +102,8 @@ class ComputeError extends Error {
 
 const compute = (expressionString) => {
     const tokens = toTokens(expressionString);
-    return 42;
+    const tokensInRPN = convertToRPN(tokens);
+    return evaluateRpn(tokensInRPN);
 }
 
 const DIGITS = new Set(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
