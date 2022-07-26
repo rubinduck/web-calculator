@@ -50,7 +50,7 @@ class BinaryOperator extends Token {
 
 
 // name, precendence, function
-const UNARI_OPERATORS = [
+const UNARY_OPERATORS = [
     ['sin', 2, x => Math.sin(x)],
     ['cos', 2, x => Math.cos(x)]]
     .map(args => new UnaryOperator(...args));
@@ -65,18 +65,23 @@ const BINARY_OPEARATORS = [
 
 
 class OperatorProvider {
-    static nameToOpearator = OperatorProvider.computeOperatorsMap()
+    static nameToUnaryOperator = OperatorProvider.computeOperatorsMap(UNARY_OPERATORS);
+    static nameToBinaryOperator = OperatorProvider.computeOperatorsMap(BINARY_OPEARATORS);
 
-    static computeOperatorsMap(){
-        const operators = UNARI_OPERATORS.concat(BINARY_OPEARATORS);
-        return new Map(operators.map(op => [op.name, op]))
-    }
+    static computeOperatorsMap = (operators) =>
+        new Map(operators.map(op => [op.name, op]))
 
-    static operatorExists = (operatorName) => 
-        OperatorProvider.nameToOpearator.has(operatorName);
+    static unaryOperatorExists = (operatorName) =>
+        OperatorProvider.nameToUnaryOperator.has(operatorName);
+
+    static getUnaryOperator = (operatorName) =>
+        OperatorProvider.nameToUnaryOperator.get(operatorName);
+
+    static binaryOperatorExists = (operatorName) =>
+        OperatorProvider.nameToBinaryOperator.has(operatorName);
     
-    static getOperator = (operatorName) =>
-        OperatorProvider.nameToOpearator.get(operatorName);
+    static getBinaryOperator = (operatorName) =>
+        OperatorProvider.nameToBinaryOperator.get(operatorName);
 }
 
 
