@@ -52,7 +52,7 @@ class BinaryOperator extends Token {
 // name, precendence, function
 const UNARY_OPERATORS = [
     ['+', 0, x => x],
-    ['-', 0 x => -x],
+    ['-', 0, x => -x],
     ['sin', 2, x => Math.sin(x)],
     ['cos', 2, x => Math.cos(x)]]
     .map(args => new UnaryOperator(...args));
