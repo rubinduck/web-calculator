@@ -164,9 +164,9 @@ const parseMiltiarityOperator = (char, tokens) => {
     const previousTokenType = tokens.at(-1)?.constructor;
     // if ther is no previous token or it was ')' or Binary operator, than
     // next operator is unary
-    if (previousTokenType in [undefined, LeftParenthesis, BinaryOperator])
+    if ([undefined, LeftParenthesis, BinaryOperator].includes(previousTokenType))
         return getUnaryOperator(char);
-    if (previousTokenType in [RightParenthesis, NumberToken])
+    if ([RightParenthesis, NumberToken].includes(previousTokenType))
         return getBinaryOperator(char);
     // only left option for previous token is unary operator 
     throw new ComputeError(`Operator ${char} can't follow unary opearotr`);
