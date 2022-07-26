@@ -64,25 +64,20 @@ const BINARY_OPEARATORS = [
     .map(args => new BinaryOperator(...args));
 
 
-class OperatorProvider {
-    static nameToUnaryOperator = OperatorProvider.computeOperatorsMap(UNARY_OPERATORS);
-    static nameToBinaryOperator = OperatorProvider.computeOperatorsMap(BINARY_OPEARATORS);
+const NAME_TO_UNARY_OPERATOR = new Map(UNARY_OPERATORS.map(op => [op.name, op]));
+const NAME_TO_BINARY_OPERATOR = new Map(BINARY_OPEARATORS.map(op => [op.name, op]));
 
-    static computeOperatorsMap = (operators) =>
-        new Map(operators.map(op => [op.name, op]))
+const getUnaryOperator = (operatorName) =>
+    NAME_TO_UNARY_OPERATOR.get(operatorName)
 
-    static unaryOperatorExists = (operatorName) =>
-        OperatorProvider.nameToUnaryOperator.has(operatorName);
+const getBinaryOperator = (operatorName) =>
+    NAME_TO_BINARY_OPERATOR.get(operatorName)
 
-    static getUnaryOperator = (operatorName) =>
-        OperatorProvider.nameToUnaryOperator.get(operatorName);
+const unaryOperatorExists = (operatorName) =>
+    getUnaryOperator(operatorName) !== undefined;
 
-    static binaryOperatorExists = (operatorName) =>
-        OperatorProvider.nameToBinaryOperator.has(operatorName);
-    
-    static getBinaryOperator = (operatorName) =>
-        OperatorProvider.nameToBinaryOperator.get(operatorName);
-}
+const binaryOperatorExists = (operatorName) =>
+    getBinaryOperator(operatorName) !== undefined;
 
 
 class LeftParenthesisToken extends Token {
@@ -120,9 +115,9 @@ const toTokens = (string) => {
             operatorNameChars.push(chars.shift());
         const operatorName = operatorNameChars.join('');
         // multicharacter operator from letters can be only unary
-        if (!OperatorProvider.unaryOperatorExists(operatorName))
+        if (!unaryOperatorExists(operatorName))
             throw new ComputeError(`Operator [${operatorName}] doesn't exist`);
-        return OperatorProvider.getUnaryOperator(operatorName);
+        return getUnaryOperator(operatorName);
     }
 
     chars = string.replaceAll(' ', '')
@@ -145,10 +140,10 @@ const toTokens = (string) => {
             token = new NumberToken(numberString);
         } else if (isAlphabetLetter(char)){
             token = parseFuncitonToken(char, chars);
-        } else if (OperatorProvider.binaryOperatorExists(char) && !OperatorProvider.unaryOperatorExists(char)){
-            token = OperatorProvider.getBinaryOperator(char);
-        } else if (!OperatorProvider.binaryOperatorExists(char) && OperatorProvider.unaryOperatorExists(char)){
-            token = OperatorProvider.getUnaryOperator(char);
+        } else if (binaryOperatorExists(char) && !unaryOperatorExists(char)){
+            token = getBinaryOperator(char);
+        } else if (!binaryOperatorExists(char) && unaryOperatorExists(char)){
+            token = getUnaryOperator(char);
         } else {
             throw new ComputeError(`Character [${char}] doesn't match any rules`);
         }
