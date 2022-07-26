@@ -1,6 +1,6 @@
 // TODO add float numbers
 // TODO add unary + and -
-import genEnum from './enum.js';
+import genEnum from './enum.mjs';
 
 
 const isEmpty = (array) => array.length === 0;
