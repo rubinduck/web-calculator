@@ -111,29 +111,6 @@ const isAlphabetLetter = (char) => ALPHABET_LETTERS.has(char);
 const isDigit = (char) => DIGITS.has(char);
 
 const toTokens = (string) => {
-    const parseFuncitonToken = (firstLetter, chars) => {
-        const operatorNameChars = [firstLetter];
-        while(!isEmpty(chars) && isAlphabetLetter(chars[0]))
-            operatorNameChars.push(chars.shift());
-        const operatorName = operatorNameChars.join('');
-        // multicharacter operator from letters can be only unary
-        if (!unaryOperatorExists(operatorName))
-            throw new ComputeError(`Operator [${operatorName}] doesn't exist`);
-        return getUnaryOperator(operatorName);
-    }
-
-    const parseMiltiarityOperator = (char, tokens) => {
-        const previousTokenType = tokens.at(-1)?.constructor;
-        // if ther is no previous token or it was ')' or Binary operator, than
-        // next operator is unary
-        if (previousTokenType in [undefined, LeftParenthesis, BinaryOperator])
-            return getUnaryOperator(char);
-        if (previousTokenType in [RightParenthesis, NumberToken])
-            return getBinaryOperator(char);
-        // only left option for previous token is unary operator 
-        throw new ComputeError(`Operator ${char} can't follow unary opearotr`);
-    }
-
     const chars = string.replaceAll(' ', '')
                   .toLowerCase()
                   .split('');
@@ -167,6 +144,29 @@ const toTokens = (string) => {
         tokens.push(token);
     }
     return tokens;
+}
+
+const parseFuncitonToken = (firstLetter, chars) => {
+    const operatorNameChars = [firstLetter];
+    while(!isEmpty(chars) && isAlphabetLetter(chars[0]))
+        operatorNameChars.push(chars.shift());
+    const operatorName = operatorNameChars.join('');
+    // multicharacter operator from letters can be only unary
+    if (!unaryOperatorExists(operatorName))
+        throw new ComputeError(`Operator [${operatorName}] doesn't exist`);
+    return getUnaryOperator(operatorName);
+}
+
+const parseMiltiarityOperator = (char, tokens) => {
+    const previousTokenType = tokens.at(-1)?.constructor;
+    // if ther is no previous token or it was ')' or Binary operator, than
+    // next operator is unary
+    if (previousTokenType in [undefined, LeftParenthesis, BinaryOperator])
+        return getUnaryOperator(char);
+    if (previousTokenType in [RightParenthesis, NumberToken])
+        return getBinaryOperator(char);
+    // only left option for previous token is unary operator 
+    throw new ComputeError(`Operator ${char} can't follow unary opearotr`);
 }
 
 const convertToRPN = (tokens) => {
