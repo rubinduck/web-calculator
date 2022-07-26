@@ -120,7 +120,7 @@ const toTokens = (string) => {
         return getUnaryOperator(operatorName);
     }
 
-    chars = string.replaceAll(' ', '')
+    const chars = string.replaceAll(' ', '')
                   .toLowerCase()
                   .split('');
     const tokens = [];
