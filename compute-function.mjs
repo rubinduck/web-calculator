@@ -226,21 +226,32 @@ const convertToRPN = (tokens) => {
 
 const evaluateRpn = (rpn) => {
     rpn = [...rpn]
-    const args = [];
+    const operands = [];
     while(!isEmpty(rpn)){
         const token = rpn.shift();
         switch (token.constructor){
             case NumberToken:
-                args.push(token.number);
-                while (!isEmpty(rpn) && rpn.at(0) instanceof NumberToken)
-                    args.push(rpn.shift().number)
-            break;
-            //TODO maybe add functions of multiple arguments
-            case FunctionToken:
-                if (isEmpty(args)) throw new OperatorToken('No argument for function');
-                args[args.length - 1] = null
+                operands.push(token.number);
+                break;
+            case UnaryOperator:
+                const argument = operands.at(-1);
+                if (argument === undefined)
+                    throw new ComputeError(`No argument for [${token}] opeartor`);
+                operands.splice(-1, 1, token.evaluate(argument));
+                break;
+            case BinaryOperator:
+                const args = operands.slice(-2);
+                if (args.length < 2)
+                    throw new ComputeError(`Not enogught operands for [${token}]`);
+                operands.splice(-2, 2, token.evaluate(...args));
+                break;
+            default:
+                throw new ComputeError(`[${token}] is unknown token type`);
         }
     }
+    if (operands.length !== 1)
+        throw new ComputeError('Not enoght operands');
+    return operands[0];
 } 
 
 
