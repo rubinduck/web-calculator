@@ -202,4 +202,37 @@ const convertToRPN = (tokens) => {
     return outputQueue;
 }
 
+
+const evaluateRpn = (rpn) => {
+    rpn = [...rpn]
+    const args = [];
+    while(!isEmpty(rpn)){
+        const token = rpn.shift();
+        switch (token.constructor){
+            case NumberToken:
+                args.push(token.number);
+                while (!isEmpty(rpn) && rpn.at(0) instanceof NumberToken)
+                    args.push(rpn.shift().number)
+            break;
+            //TODO maybe add functions of multiple arguments
+            case FunctionToken:
+                if (isEmpty(args)) throw new OperatorToken('No argument for function');
+                args[args.length - 1] = null
+        }
+    }
+} 
+
+
+const RpnToString = (rpnArray) =>
+    rpnArray.map(el => el.toString())
+            .join(' ');
+
+
+const inputs = [
+    '' , '1+1', '+2', 
+    '35', 'sin(5)', '7*5 /4* + 7',
+    '4-sin(5)+7', 
+    '7*5 /4* sin(7 )'];
+// for (const input of inputs)
+    // console.log([input, RpnToString(convertToRPN(toTokens(input)))])
 export {ComputeError, compute};
