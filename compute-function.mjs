@@ -123,13 +123,7 @@ const toTokens = (string) => {
         } else if (char === ')'){
             token = new RightParenthesis();
         } else if (isDigit(char)){
-            // TODO move digit parsing to separate function
-            const numberChars = [char]
-            // Maybe remove check for isEmpty
-            while(!isEmpty(chars) && isDigit(chars[0]))
-                numberChars.push(chars.shift())
-            const numberString = numberChars.join('');
-            token = new NumberToken(numberString);
+            token = parseNumberToken(char, chars);
         } else if (isAlphabetLetter(char)){
             token = parseFuncitonToken(char, chars);
         } else if (binaryOperatorExists(char) && unaryOperatorExists){
@@ -144,6 +138,15 @@ const toTokens = (string) => {
         tokens.push(token);
     }
     return tokens;
+}
+
+// TODO add support for float
+const parseNumberToken = (char, chars) => {
+    const numberChars = [char]
+    while(isDigit(chars[0]))
+        numberChars.push(chars.shift())
+    const numberString = numberChars.join('');
+    return new NumberToken(numberString);
 }
 
 const parseFuncitonToken = (firstLetter, chars) => {
@@ -168,6 +171,7 @@ const parseMiltiarityOperator = (char, tokens) => {
     // only left option for previous token is unary operator 
     throw new ComputeError(`Operator ${char} can't follow unary opearotr`);
 }
+
 
 const convertToRPN = (tokens) => {
     tokens = [...tokens];
