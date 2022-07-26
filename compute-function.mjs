@@ -11,7 +11,7 @@ class NumberToken extends Token {
     number;
     constructor(numberString){
         super();
-        this.number = new Number(numberString);
+        this.number = Number(numberString);
     }
 
     toString = () => this.number.toString();
