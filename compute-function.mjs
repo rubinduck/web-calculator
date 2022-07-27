@@ -128,7 +128,7 @@ const toTokens = (string) => {
         else if (isAlphabetLetter(char))
             token = parseFuncitonToken(char, chars);
         else if (binaryOperatorExists(char) && unaryOperatorExists)
-            token = parseMiltiarityOperator(char, tokens);
+            token = parseMultiarityOperator(char, tokens);
         else if (binaryOperatorExists(char))
             token = getBinaryOperator(char);
         else if (unaryOperatorExists(char))
@@ -161,7 +161,7 @@ const parseFuncitonToken = (firstLetter, chars) => {
     return getUnaryOperator(operatorName);
 }
 
-const parseMiltiarityOperator = (char, tokens) => {
+const parseMultiarityOperator = (char, tokens) => {
     const previousTokenType = tokens.at(-1)?.constructor;
     // if ther is no previous token or it was ')' or Binary operator, than
     // next operator is unary
@@ -244,7 +244,7 @@ const evaluateRpn = (rpn) => {
                 const args = operands.slice(-2);
                 if (args.length < 2)
                     throw new ComputeError(`Not enogught operands for [${token}]`);
-                operands.splice(-2, 2, operator.apply(...args));
+                operands.splice(-2, 2, token.apply(...args));
                 break;
             default:
                 throw new ComputeError(`[${token}] is unknown token type`);
