@@ -21,12 +21,12 @@ const Associativity = genEnum('Left', 'Right');
 class UnaryOperator extends Token {
     name;
     precendence;
-    evaluate;
-    constructor(name, precendence, evaluate){
+    apply;
+    constructor(name, precendence, apply){
         super();
         this.name = name;
         this.precendence = precendence;
-        this.evaluate = evaluate;
+        this.apply = apply;
     }
 
     toString = () => this.name;
@@ -36,13 +36,13 @@ class BinaryOperator extends Token {
     name;
     precendence;
     associativity;
-    evaluate;
-    constructor(name, precendence, associativity, evaluate){
+    apply;
+    constructor(name, precendence, associativity, apply){
         super();
         this.name = name;
         this.precendence = precendence;
         this.associativity = associativity;
-        this.evaluate = evaluate;
+        this.apply = apply;
     }
 
     toString = () => this.name;
@@ -238,13 +238,13 @@ const evaluateRpn = (rpn) => {
                 const argument = operands.at(-1);
                 if (argument === undefined)
                     throw new ComputeError(`No argument for [${token}] opeartor`);
-                operands.splice(-1, 1, token.evaluate(argument));
+                operands.splice(-1, 1, token.apply(argument));
                 break;
             case BinaryOperator:
                 const args = operands.slice(-2);
                 if (args.length < 2)
                     throw new ComputeError(`Not enogught operands for [${token}]`);
-                operands.splice(-2, 2, token.evaluate(...args));
+                operands.splice(-2, 2, operator.apply(...args));
                 break;
             default:
                 throw new ComputeError(`[${token}] is unknown token type`);
