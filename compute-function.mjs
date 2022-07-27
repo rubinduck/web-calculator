@@ -134,7 +134,7 @@ const toTokens = (string) => {
         else if (unaryOperatorExists(char))
             token = getUnaryOperator(char);
         else
-            throw new ComputeError(`Character [$char] doesn't match any rules`);
+            throw new ComputeError(`Character [${char}] doesn't match any rules`);
 
         tokens.push(token);
     }
