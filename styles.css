@@ -26,31 +26,37 @@ body {
 
 @media screen and (min-width:481px){
     #calculator {
-        width: 65%;
+        width: 75%;
     }
 }
 
-@media screen and (min-width:585px){
+@media screen and (min-width:750px){
     #calculator {
-        width: 50%;
+        width: 60%;
     }
 }
 
 @media screen and (min-width:900px){
     #calculator {
-        width: 35%;
+        width: 55%;
     }
 }
 
 @media screen and (min-width:1200px){
     #calculator {
-        width: 25%;
+        width: 40%;
     }
 }
 
 @media screen and (min-width:1400px){
     #calculator {
-        width: 20%;
+        width: 35%;
+    }
+}
+
+@media screen and (min-width:1600px){
+    #calculator {
+        width: 25%;
     }
 }
 
@@ -62,7 +68,7 @@ body {
     border-radius: 0.5rem;
     background-color: blueviolet;
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 3.5rem;
+    font-size: 2.5rem;
 }
 
 #calculator__input-field {
@@ -73,18 +79,11 @@ body {
 }
 
 .calculator__buttons-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.calculator__buttons-grid > .row {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
-    justify-content: center;
 }
 
 .calculator-button {
-    padding: 0 1.5rem;
     cursor: pointer;
 }
