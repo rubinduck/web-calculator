@@ -123,7 +123,7 @@ const toTokens = (string) => {
             token = new LeftParenthesis();
         else if (char === ')')
             token = new RightParenthesis();
-        else if (isDigit(char))
+        else if (isDigit(char) || char === '.')
             token = parseNumberToken(char, chars);
         else if (isAlphabetLetter(char))
             token = parseFuncitonToken(char, chars);
