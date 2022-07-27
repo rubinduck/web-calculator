@@ -110,6 +110,13 @@ const DIGITS = new Set(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
 const ALPHABET_LETTERS = new Set('abcdefghijklmnopqrstuvwxyz'.split(''));
 const isAlphabetLetter = (char) => ALPHABET_LETTERS.has(char);
 const isDigit = (char) => DIGITS.has(char);
+const ALLOWED_CHARS = new Set([
+    ...DIGITS,
+    ...ALPHABET_LETTERS,
+    '.', '(', ')',
+    ...NAME_TO_UNARY_OPERATOR.keys(),
+    ...NAME_TO_BINARY_OPERATOR.keys()
+]);
 
 const toTokens = (string) => {
     const chars = string.replaceAll(' ', '')
@@ -269,10 +276,10 @@ const RpnToString = (rpnArray) =>
 
 
 const inputs = [
-    '' , '1+1', '+2', 
+    '1+1', '+2', 
     '35', 'sin(5)', '7*5 /4* + 7',
     '4-sin(5)+7', 
-    '7*5 /4* sin(7 )'];
-for (const input of inputs)
-    console.log([input, RpnToString(convertToRPN(toTokens(input)))])
-export {ComputeError, compute};
+    '7*5 /4* sin(7 )', '0.5*8', '-0.7 * -0.3'];
+for (const input of inputs1)
+    console.log([input, compute(input)]);
+export {ALLOWED_CHARS, ComputeError, compute};
