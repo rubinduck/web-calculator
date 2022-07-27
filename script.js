@@ -5,6 +5,7 @@ const CALCULATOR_CLASS_ID = 'calculator';
 const INPUT_FIELD_ID = 'calculator__input-field';
 const INPUT_BUTTON_CLASS_NAME = 'input-button';
 const ENTER_BUTTON_ID = 'enter-button';
+const CLEAR_BUTTON_ID = 'clear-button';
 
 const getElementsByClassName = (parent, className) => 
     Array.from(parent.getElementsByClassName(className));
@@ -26,11 +27,18 @@ class Calculator {
 
         const enterButton = document.getElementById(ENTER_BUTTON_ID);
         enterButton.addEventListener('click', (e) => this.handleEnter());
+
+        const clearButton = document.getElementById(CLEAR_BUTTON_ID);
+        clearButton.addEventListener('click', () => this.clear());
     }
 
     handleInputButtonClick(event){
         const button = event.currentTarget;
         this.inputField.value += button.textContent;
+    }
+
+    clear(){
+        this.inputField.value = '';
     }
 
     handleEnter(){
