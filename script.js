@@ -1,5 +1,5 @@
 'use strict'
-import {compute} from './compute-function.mjs';
+import {ALLOWED_CHARS, compute} from './compute-function.mjs';
 
 const CALCULATOR_CLASS_ID = 'calculator';
 const INPUT_FIELD_ID = 'calculator__input-field';
@@ -26,22 +26,26 @@ class Calculator {
             button => button.addEventListener('click', (e) => this.handleInputButtonClick(e)));
 
         const enterButton = document.getElementById(ENTER_BUTTON_ID);
-        enterButton.addEventListener('click', (e) => this.handleEnter());
+        enterButton.addEventListener('click', (e) => this.enter());
 
         const clearButton = document.getElementById(CLEAR_BUTTON_ID);
         clearButton.addEventListener('click', () => this.clear());
     }
 
     handleInputButtonClick(event){
-        const button = event.currentTarget;
-        this.inputField.value += button.textContent;
+        const text = event.currentTarget.textContent;
+        this.inputString(text);
+    }
+
+    inputString(string){
+        this.inputField.value += string;
     }
 
     clear(){
         this.inputField.value = '';
     }
 
-    handleEnter(){
+    enter(){
         const computationResult = this.computeFunction(this.inputField.value)
         this.inputField.value = Calculator.round(computationResult, 5);
     }
@@ -49,11 +53,31 @@ class Calculator {
     // toFixed returns string, so we need to turn it back to number
     static round = (number, n) =>
         Number(number.toFixed(n));
+
+    deleteLastChar(){
+        if (this.inputField.value === '') return;
+        this.inputField.value = this.inputField.value.slice(0, -1);
+    }
 }
 
+function addEventListenerToDocument(calculator){
+    document.addEventListener('keydown', event => {
+        const key = event.key;
+        if (key === 'Enter'){
+            calculator.enter();
+            return;
+        }
+        if (calculator.inputField === document.activeElement) return;
+        if (ALLOWED_CHARS.has(key))
+            calculator.inputString(key);
+        else if (key === 'Backspace')
+            calculator.deleteLastChar()
+    });
+}
 
 function main(){
     const calclulatorElement = document.getElementById(CALCULATOR_CLASS_ID);
     const calclulator = new Calculator(calclulatorElement, compute);
+    addEventListenerToDocument(calclulator);
 }
 main();
