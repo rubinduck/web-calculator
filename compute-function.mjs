@@ -143,9 +143,16 @@ const toTokens = (string) => {
 
 // TODO add support for float
 const parseNumberToken = (char, chars) => {
-    const numberChars = [char]
-    while(isDigit(chars[0]))
-        numberChars.push(chars.shift())
+    const numberChars = [char];
+    let dotAmount = 0;
+    char = chars.at(0)
+    while(char === '.' || isDigit(char)){
+        if (char === '.') dotAmount++;
+        numberChars.push(chars.shift());
+        char = chars.at(0)
+    }
+    if (dotAmount > 1)
+        throw new ComputeError(`Number can't have more than one dot, has [${dotAmount}]`);
     const numberString = numberChars.join('');
     return new NumberToken(numberString);
 }
