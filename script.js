@@ -37,6 +37,8 @@ class Calculator {
 
         const clearButton = document.getElementById(CLEAR_BUTTON_ID);
         clearButton.addEventListener('click', () => this.clear());
+
+        this.inputField.addEventListener('input', e => this.removeErrorMessage());
     }
 
     handleInputButtonClick(event){
