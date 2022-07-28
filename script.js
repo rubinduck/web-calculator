@@ -1,11 +1,13 @@
 'use strict'
-import {ALLOWED_CHARS, compute} from './compute-function.mjs';
+import {ALLOWED_CHARS, ComputeError, compute} from './compute-function.mjs';
 
-const CALCULATOR_CLASS_ID = 'calculator';
+const CALCULATOR_CONTAINER_ID = 'calculator-container';
+const CALCULATOR_ID = 'calculator';
 const INPUT_FIELD_ID = 'calculator__input-field';
 const INPUT_BUTTON_CLASS_NAME = 'input-button';
 const ENTER_BUTTON_ID = 'enter-button';
 const CLEAR_BUTTON_ID = 'clear-button';
+const ERORR_MESSAGE_CLASS = 'error-message';
 
 const getElementsByClassName = (parent, className) => 
     Array.from(parent.getElementsByClassName(className));
@@ -14,10 +16,15 @@ const getElementsByClassName = (parent, className) =>
 class Calculator {
     computeFunction;
     inputField;
-    constructor(calculatorElement, computeFunction){
+    calculatorContainer;
+    calculatorElement;
+    errorElement = null;
+    constructor(calculatorContainer, calclulatorElement, computeFunction){
+        this.calculatorContainer = calculatorContainer;
         this.computeFunction = computeFunction;
         this.inputField = document.getElementById(INPUT_FIELD_ID);
-        this.addHanlders(calculatorElement) 
+        this.calculatorElement = calclulatorElement;
+        this.addHanlders(this.calculatorElement);
     }
 
     addHanlders(calculatorElement){
@@ -38,15 +45,25 @@ class Calculator {
     }
 
     inputString(string){
+        this.removeErrorMessage();
         this.inputField.value += string;
     }
 
     clear(){
+        this.removeErrorMessage();
         this.inputField.value = '';
     }
 
     enter(){
-        const computationResult = this.computeFunction(this.inputField.value)
+        this.removeErrorMessage();
+        let computationResult;
+        try {
+            computationResult = this.computeFunction(this.inputField.value)
+        } catch (error){
+            console.log(error.message)
+            this.showErrorMessage(error.message);
+            return;
+        }
         this.inputField.value = Calculator.round(computationResult, 5);
     }
 
@@ -55,10 +72,26 @@ class Calculator {
         Number(number.toFixed(n));
 
     deleteLastChar(){
+        this.removeErrorMessage();
         if (this.inputField.value === '') return;
         this.inputField.value = this.inputField.value.slice(0, -1);
     }
+
+    showErrorMessage(text){
+        const errorElement = document.createElement('div');
+        errorElement.classList.add('error-message');
+        errorElement.textContent = `Error: ${text}`;
+        this.calculatorContainer.insertBefore(errorElement, this.calculatorElement);
+        this.errorElement = errorElement;
+    }
+
+    removeErrorMessage(){
+        if (this.errorElement === null) return; 
+        this.calculatorContainer.removeChild(this.errorElement);
+        this.errorElement = null;
+    }
 }
+
 
 function addEventListenerToDocument(calculator){
     document.addEventListener('keydown', event => {
@@ -75,9 +108,11 @@ function addEventListenerToDocument(calculator){
     });
 }
 
+
 function main(){
-    const calclulatorElement = document.getElementById(CALCULATOR_CLASS_ID);
-    const calclulator = new Calculator(calclulatorElement, compute);
+    const calculatorContainer = document.getElementById(CALCULATOR_CONTAINER_ID);
+    const calclulatorElement = document.getElementById(CALCULATOR_ID);
+    const calclulator = new Calculator(calculatorContainer, calclulatorElement, compute);
     addEventListenerToDocument(calclulator);
 }
 main();
