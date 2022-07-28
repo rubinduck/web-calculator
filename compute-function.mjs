@@ -280,6 +280,6 @@ const inputs = [
     '35', 'sin(5)', '7*5 /4* + 7',
     '4-sin(5)+7', 
     '7*5 /4* sin(7 )', '0.5*8', '-0.7 * -0.3'];
-for (const input of inputs1)
+for (const input of inputs)
     console.log([input, compute(input)]);
 export {ALLOWED_CHARS, ComputeError, compute};
