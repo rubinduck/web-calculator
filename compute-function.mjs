@@ -105,7 +105,7 @@ const compute = (expressionString) => {
 const DIGITS = new Set(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
 const ALPHABET_LETTERS = new Set('abcdefghijklmnopqrstuvwxyz'.split(''));
 const isAlphabetLetter = (char) => ALPHABET_LETTERS.has(char);
-const isDigit = (char) => DIGITS.has(char);
+const isDigitOrDot = (char) => DIGITS.has(char) || char == '.';
 const ALLOWED_CHARS = new Set([
     ...DIGITS,
     ...ALPHABET_LETTERS,
@@ -126,7 +126,7 @@ const toTokens = (string) => {
             token = new LeftParenthesis();
         else if (char === ')')
             token = new RightParenthesis();
-        else if (isDigit(char) || char === '.')
+        else if (isDigitOrDot(char))
             token = parseNumberToken(char, chars);
         else if (isAlphabetLetter(char))
             token = parseFuncitonToken(char, chars);
@@ -138,33 +138,31 @@ const toTokens = (string) => {
             token = getUnaryOperator(char);
         else
             throw new ComputeError(`Character [${char}] doesn't match any rules`);
-
         tokens.push(token);
     }
     return tokens;
 }
 
-// TODO add support for float
 const parseNumberToken = (char, chars) => {
     const numberChars = [char];
-    let dotAmount = 0;
+    let dotsAmount = 0;
     char = chars.at(0)
-    while(char === '.' || isDigit(char)){
-        if (char === '.') dotAmount++;
+    while (isDigitOrDot(char)){
+        if (char === '.') dotsAmount++;
         numberChars.push(chars.shift());
         char = chars.at(0)
     }
-    if (dotAmount > 1)
-        throw new ComputeError(`Number can't have more than one dot, has [${dotAmount}]`);
+    if (dotsAmount > 1)
+        throw new ComputeError(`Number can't have more than one dot, has [${dotsAmount}]`);
     const numberString = numberChars.join('');
     return new NumberToken(numberString);
 }
 
 const parseFuncitonToken = (firstLetter, chars) => {
-    const operatorNameChars = [firstLetter];
-    while(!isEmpty(chars) && isAlphabetLetter(chars[0]))
-        operatorNameChars.push(chars.shift());
-    const operatorName = operatorNameChars.join('');
+    const functionNameChars = [firstLetter];
+    while(isAlphabetLetter(chars.at(0)))
+        functionNameChars.push(chars.shift());
+    const operatorName = functionNameChars.join('');
     // multicharacter operator from letters can be only unary
     if (!unaryOperatorExists(operatorName))
         throw new ComputeError(`Operator [${operatorName}] doesn't exist`);
