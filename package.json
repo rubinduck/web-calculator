@@ -1,0 +1,22 @@
+{
+  "name": "web-calculator",
+  "version": "1.0.0",
+  "description": "Simple calcualtor build with html, css, js",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rubinduck/web-calculator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rubinduck/web-calculator/issues"
+  },
+  "homepage": "https://github.com/rubinduck/web-calculator#readme",
+  "devDependencies": {
+    "eslint": "^8.20.0"
+  }
+}
