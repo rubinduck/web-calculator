@@ -181,7 +181,6 @@ const parseMultiarityOperator = (char, tokens) => {
     throw new ComputeError(`Operator ${char} can't follow unary opearotr`);
 }
 
-
 const convertToRpn = (tokens) => {
     tokens = [...tokens];
     const outputQueue = [];
@@ -196,40 +195,45 @@ const convertToRpn = (tokens) => {
                 operatorStack.push(token)
                 break;
             case BinaryOperator:
-                let lastOperator = operatorStack.at(-1);
-                while(!isEmpty(operatorStack) &&
-                      !(lastOperator instanceof LeftParenthesis) &&
-                      (lastOperator.precendence > token.precendence ||
-                      (lastOperator.precendence === token.precendence && token.associativity === Associativity.Left))
-                     ){
-                        outputQueue.push(operatorStack.pop());
-                        lastOperator = operatorStack.at(-1);
-                }
-                operatorStack.push(token)
+                handleBinaryOpeator(token, operatorStack, outputQueue);
                 break;
             case LeftParenthesis:
                 operatorStack.push(token);
                 break;
             case RightParenthesis:
-                while(!(operatorStack.at(-1) instanceof LeftParenthesis)){
-                    if (isEmpty(operatorStack))
-                        throw new ComputeError('Right parenthesis present, but no opening left one');
-                    outputQueue.push(operatorStack.pop());
-                }
-                operatorStack.pop(); // removing left parenthesis
-                if (operatorStack.at(-1) instanceof UnaryOperator)
-                    outputQueue.push(operatorStack.pop());
+                handleRightParenthesis(operatorStack, outputQueue);
                 break;
         }
     }
 
-    while(!isEmpty(operatorStack)){
-        const operator = operatorStack.pop();
-        if (operator instanceof LeftParenthesis)
-            throw new ComputeError('Left parenthesis present, but no closing right one');
-        outputQueue.push(operator);
-    }
+    if (operatorStack.some(op => op instanceof LeftParenthesis))
+        throw new ComputeError('Left parenthesis present, but no closing right one');
+    outputQueue.push(...operatorStack);
     return outputQueue;
+}
+
+const handleBinaryOpeator = (operator, operatorStack, outputQueue) => {
+    let lastOperator = operatorStack.at(-1);
+    while(!isEmpty(operatorStack) &&
+            !(lastOperator instanceof LeftParenthesis) &&
+            (lastOperator.precendence > operator.precendence ||
+            (lastOperator.precendence === operator.precendence && operator.associativity === Associativity.Left))
+            ){
+            outputQueue.push(operatorStack.pop());
+            lastOperator = operatorStack.at(-1);
+    }
+    operatorStack.push(operator)
+}
+
+const handleRightParenthesis = (operatorStack, outputQueue) => {
+    while(!(operatorStack.at(-1) instanceof LeftParenthesis)){
+        if (isEmpty(operatorStack))
+            throw new ComputeError('Right parenthesis present, but no opening left one');
+        outputQueue.push(operatorStack.pop());
+    }
+    operatorStack.pop(); // removing left parenthesis
+    if (operatorStack.at(-1) instanceof UnaryOperator)
+    outputQueue.push(operatorStack.pop());
 }
 
 
