@@ -263,7 +263,7 @@ const evaluateRpn = (rpn) => {
         }
     }
     if (operands.length !== 1)
-        throw new ComputeError('Not enoght operands');
+        throw new ComputeError('Not enought operators');
     return operands[0];
 } 
 
