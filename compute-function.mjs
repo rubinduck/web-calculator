@@ -3,6 +3,7 @@ import genEnum from './enum.mjs';
 
 const isEmpty = (array) => array.length === 0;
 
+
 class Token {}
 
 class NumberToken extends Token {
@@ -46,6 +47,14 @@ class BinaryOperator extends Token {
     toString = () => this.name;
 }
 
+class LeftParenthesis extends Token {
+    toString = () => '(';
+}
+
+class RightParenthesis extends Token {
+    toString = () => ')';
+}
+
 
 // name, precendence, function
 const UNARY_OPERATORS = [
@@ -58,36 +67,25 @@ const UNARY_OPERATORS = [
 // name, precendence, associativity, funciton
 const BINARY_OPEARATORS = [
     ['+', 0, Associativity.Left, (a, b) => a + b],
-    ['-', 0, Associativity.Left, (a,b) => a - b],
-    ['*', 1, Associativity.Left, (a,b) => a * b],
-    ['/', 1, Associativity.Left, (a,b) => a / b]]
+    ['-', 0, Associativity.Left, (a, b) => a - b],
+    ['*', 1, Associativity.Left, (a, b) => a * b],
+    ['/', 1, Associativity.Left, (a, b) => a / b]]
     .map(args => new BinaryOperator(...args));
-
 
 const NAME_TO_UNARY_OPERATOR = new Map(UNARY_OPERATORS.map(op => [op.name, op]));
 const NAME_TO_BINARY_OPERATOR = new Map(BINARY_OPEARATORS.map(op => [op.name, op]));
 
 const getUnaryOperator = (operatorName) =>
-    NAME_TO_UNARY_OPERATOR.get(operatorName)
+    NAME_TO_UNARY_OPERATOR.get(operatorName);
 
 const getBinaryOperator = (operatorName) =>
-    NAME_TO_BINARY_OPERATOR.get(operatorName)
+    NAME_TO_BINARY_OPERATOR.get(operatorName);
 
 const unaryOperatorExists = (operatorName) =>
     getUnaryOperator(operatorName) !== undefined;
 
 const binaryOperatorExists = (operatorName) =>
     getBinaryOperator(operatorName) !== undefined;
-
-
-class LeftParenthesis extends Token {
-    toString = () => '(';
-}
-
-
-class RightParenthesis extends Token {
-    toString = () => ')';
-}
 
 
 class ComputeError extends Error {
@@ -100,8 +98,8 @@ class ComputeError extends Error {
 
 const compute = (expressionString) => {
     const tokens = toTokens(expressionString);
-    const tokensInRPN = convertToRPN(tokens);
-    return evaluateRpn(tokensInRPN);
+    const tokensInRpn = convertToRpn(tokens);
+    return evaluateRpn(tokensInRpn);
 }
 
 const DIGITS = new Set(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
@@ -186,7 +184,7 @@ const parseMultiarityOperator = (char, tokens) => {
 }
 
 
-const convertToRPN = (tokens) => {
+const convertToRpn = (tokens) => {
     tokens = [...tokens];
     const outputQueue = [];
     const operatorStack = [];
@@ -268,7 +266,7 @@ const evaluateRpn = (rpn) => {
 } 
 
 
-const RpnToString = (rpnArray) =>
+const rpnToString = (rpnArray) =>
     rpnArray.map(el => el.toString())
             .join(' ');
 
