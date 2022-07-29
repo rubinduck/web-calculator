@@ -1,5 +1,5 @@
 'use strict'
-import {ALLOWED_CHARS, ComputeError, compute} from './compute-function.mjs';
+import {ALLOWED_CHARS, compute} from './compute-function.mjs';
 
 const CALCULATOR_CONTAINER_ID = 'calculator-container';
 const CALCULATOR_ID = 'calculator';
@@ -33,12 +33,12 @@ class Calculator {
             button => button.addEventListener('click', (e) => this.handleInputButtonClick(e)));
 
         const enterButton = document.getElementById(ENTER_BUTTON_ID);
-        enterButton.addEventListener('click', (e) => this.enter());
+        enterButton.addEventListener('click', () => this.enter());
 
         const clearButton = document.getElementById(CLEAR_BUTTON_ID);
         clearButton.addEventListener('click', () => this.clear());
 
-        this.inputField.addEventListener('input', e => this.removeErrorMessage());
+        this.inputField.addEventListener('input', () => this.removeErrorMessage());
     }
 
     handleInputButtonClick(event){
@@ -81,7 +81,7 @@ class Calculator {
 
     showErrorMessage(text){
         const errorElement = document.createElement('div');
-        errorElement.classList.add('error-message');
+        errorElement.classList.add(ERORR_MESSAGE_CLASS);
         errorElement.textContent = `Error: ${text}`;
         this.calculatorContainer.insertBefore(errorElement, this.calculatorElement);
         this.errorElement = errorElement;
