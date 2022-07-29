@@ -9,11 +9,11 @@ class Enum {
 }
 
 const genEnum = (...elements) => {
-    const enumaratedObject = new Enum;
+    const enumObject = new Enum;
     for (const element of elements){
-        enumaratedObject[element] = Symbol(element);
+        enumObject[element] = Symbol(element);
     }
-    return Object.freeze(enumaratedObject);
+    return Object.freeze(enumObject);
 }
 
 export default genEnum;
