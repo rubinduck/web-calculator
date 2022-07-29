@@ -1,5 +1,3 @@
-// TODO add float numbers
-// TODO add unary + and -
 import genEnum from './enum.mjs';
 
 
