@@ -3,40 +3,34 @@
 <head>
     <meta charset='UTF-8'>
     <title>Calculator</title>
-    <link rel='stylesheet' href='calculator.css'>
+    <link rel='stylesheet' href='./css/styles.css'>
+    <script defer src='./js/script.js' type='module'></script>
 </head>
 <body>
-    <div class='calculator'>
-        <div class='calculator__input-field' contenteditable='true'></div>
-        <div class='calculator__buttons'>
-            <div class='calculator__buttons__grid'>
-                <div class='row'>
-                    <button class='calculator-button'>0</button>
-                    <button class='calculator-button'>1</button>
-                    <button class='calculator-button'>2</button>
-                </div>
-                <div class='row'>
-                    <button class='calculator-button'>3</button>
-                    <button class='calculator-button'>4</button>
-                    <button class='calculator-button'>5</button>
-                </div>
-                <div class='row'>
-                    <button class='calculator-button'>6</button>
-                    <button class='calculator-button'>7</button>
-                    <button class='calculator-button'>8</button>
-                </div>
-                <div class='row'>
-                    <button class='calculator-button'>9</button>
-                    <button class='calculator-button'>+</button>
-                    <button class='calculator-button'>-</button>
-                </div>
-                <div class='row'>
-                    <button class='calculator-button'>*</button>
-                    <button class='calculator-button'>/</button>
-                    <button class='calculator-button'>Enter</button>
-                </div>
-            </div>
+    <div id='calculator-container'>
+    <div id='calculator'>
+        <input id='calculator__input-field' type='text'></input>
+        <div class='calculator__buttons-grid'>
+            <button class='calculator-button input-button'>0</button>
+            <button class='calculator-button input-button'>1</button>
+            <button class='calculator-button input-button'>2</button>
+            <button class='calculator-button input-button'>3</button>
+            <button class='calculator-button input-button'>4</button>
+            <button class='calculator-button input-button'>5</button>
+            <button class='calculator-button input-button'>6</button>
+            <button class='calculator-button input-button'>7</button>
+            <button class='calculator-button input-button'>8</button>
+            <button class='calculator-button input-button'>9</button>
+            <button class='calculator-button input-button'>+</button>
+            <button class='calculator-button input-button'>-</button>
+            <button class='calculator-button input-button'>*</button>
+            <button class='calculator-button input-button'>/</button>
+            <button class='calculator-button input-button'>sin</button>
+            <button class='calculator-button input-button'>cos</button>
+            <button class='calculator-button' id='clear-button'>CLR</button>
+            <button class='calculator-button' id='enter-button'>=</button>
         </div>
+    </div>
     </div>
 </body>
 </html>

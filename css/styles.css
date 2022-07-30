@@ -1,0 +1,115 @@
+@import 'resets.css';
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
+
+/* general */
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: #E5ECE9;
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+
+/* calculator */
+#calculator-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+#calculator {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: blueviolet;
+    font-size: 2.5rem;
+}
+
+#calculator__input-field {
+    width: 100%;
+    border: 2px solid black;
+    text-align: right;
+    border-radius: 0.25rem;
+}
+
+.calculator__buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.calculator-button {
+    cursor: pointer;
+}
+
+.error-message {
+    width: 25rem;
+    padding: 0.5rem 1.5rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    font-size: 1.75rem;
+    color: rgb(33, 33, 33);
+    background-color: rgb(207, 88, 88);
+}
+
+@media screen and (min-width:320px){
+    #calculator {
+        width: 80%;
+    }
+}
+
+@media screen and (min-width:481px){
+    #calculator {
+        width: 75%;
+    }
+}
+
+@media screen and (min-width:750px){
+    #calculator {
+        width: 60%;
+    }
+}
+
+@media screen and (min-width:900px){
+    #calculator {
+        width: 55%;
+    }
+}
+
+@media screen and (min-width:1200px){
+    #calculator {
+        width: 40%;
+    }
+}
+
+@media screen and (min-width:1400px){
+    #calculator {
+        width: 35%;
+    }
+}
+
+@media screen and (min-width:1600px){
+    #calculator {
+        width: 25%;
+    }
+}
+
+@media screen and (max-height:700px){
+    #calculator {
+        font-size: 1.5rem;
+    }
+}
