@@ -1,4 +1,4 @@
-import {compute} from './compute-function.mjs';
+import {compute} from '../js/compute-function.mjs';
 
 
 // TODO something with this
